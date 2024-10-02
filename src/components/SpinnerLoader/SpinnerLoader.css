@@ -1,0 +1,12 @@
+.loader {
+    display: flex;
+    justify-content: center;  /* Center horizontally */
+    align-items: center;      /* Center vertically */
+    height: 100vh;            /* Make loader full screen height */
+    text-align: center;        /* Align text to center */
+  }
+  
+  .loader img {
+    max-width: 100%;          /* Adjust image size if necessary */
+    max-height: 100%;         /* Prevents image from overflowing */
+  }
