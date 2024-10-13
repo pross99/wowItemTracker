@@ -1,18 +1,19 @@
 
 import './App.css';
 import api from './api/axiosConfig'
-import {useState, useEffect} from 'react'
+import {useState, useEffect, React} from 'react'
 import {Routes, Route} from 'react-router-dom';
-import Layout from './components/Layout'
 import Home from './components/home/Home'
 import Header from "./components/header/Header"
+import Layout from './components/Layout'
 import AddItem from "./components/addItem/AddItem"
+import { UserProvider } from './components/UserContext';
+
 
 
 function App() {
 // added []
   const [items, setItems] = useState([]);
-
 
  
   const handleDelete = (itemId) => {
@@ -43,17 +44,17 @@ function App() {
 
 
   return (
-    <div className="App">
+     <UserProvider>
+      <div className="App">  
       <Header/>
    <Routes>
     <Route path="/" element={<Layout/>}>
       <Route path="/" element={<Home items={items} onDelete={handleDelete}/>} ></Route>
         <Route path="/Add" element={<AddItem/>} ></Route>  
-
-
     </Route>
    </Routes>
-    </div>
+    </div> 
+ </UserProvider>
   );
 }
 

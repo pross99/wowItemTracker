@@ -5,7 +5,8 @@ import { Paper } from '@mui/material';
 import wowheadpng from '../../images/wowhead.png'
 import { padding } from '@mui/system';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDeleteLeft } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faDeleteLeft } from '@fortawesome/free-solid-svg-icons';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios'
 import axiosInstance from '../../api/axiosConfig';
 
@@ -21,7 +22,7 @@ import axiosInstance from '../../api/axiosConfig';
 
 
 
-const Hero = ({ items, onDelete }) => {
+const Hero = ({ items, onDelete, onEdit, onComplete }) => {
     const handleDelete = async (wowheadId) => {
         try {
           await axiosInstance.delete(`/api/v1/items/${wowheadId}`);
@@ -36,6 +37,16 @@ const Hero = ({ items, onDelete }) => {
         console.log('onDelete called with wowheadId:', wowheadId );
         onDelete(wowheadId)
       }
+
+ /*      const handleEdit = async (wowheadId) => {
+        try {
+            await axiosInstance.put(`/api/v1/items/${wowheadId}`);
+        }
+      } */
+
+
+
+
 
 const [imageUrls, setImageUrls] = useState ({})
 
@@ -105,6 +116,21 @@ useEffect(() => {
                                                      icon ={faDeleteLeft}
                                                     />
                                                    
+                                                </div>
+                                            </div>
+                                            <div className= "item-buttons-container">
+                                                <div className="edit-button-icon-container">
+                                                    <FontAwesomeIcon className= "edit-button-icon"
+                                                    icon ={faPenToSquare}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className = "item-buttons-container">
+                                                <div className= "complete-button-icon-container">
+                                                    <FontAwesomeIcon className= "complete-button-icon"
+                                                    icon ={faCheck}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>

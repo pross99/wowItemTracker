@@ -9,7 +9,9 @@ import './SpinnerLoader.css'
 
     export default function SpinnerLoader() {
       // Initialize state variables
+
       const [showImg, setShowImg] = useState(true);  // Show image by default
+  
       const [text, setText] = useState('');          // Initialize with an empty string
     
       // Side effect for setting a timeout to switch from spinner to text
@@ -23,15 +25,14 @@ import './SpinnerLoader.css'
         return () => clearTimeout(timer);
       }, []);
     
+
       return (
         <>
+        {showImg && (
           <div className="loader" >
-            {showImg ? (
               <img src={image} alt="Loading spinner" />
-            ) : (
-              <h3>{text}</h3>
-            )}
           </div>
+            )}
         </>
       );
     }

@@ -73,15 +73,19 @@
 }
 .item-buttons-container{
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 300px;
+    justify-content: center;
+    gap: 1px; 
 }
 .delete-button-icon-container{
     padding:0px;
     margin: 0px;
-    width: 150px;
+    width: 20px;
     padding-top: 15px;
+    text-align: center;
+    list-style: none;
+    display: inline-block;
+    width: 80px;
+    line-height: 50px;
 }
 
 .delete-button-icon{
@@ -97,6 +101,60 @@
     font-size: 4rem;
     color:red
 }
+
+.edit-button-icon-container{
+    padding:0px;
+    margin: 0px;
+    width: 20px;
+    padding-top: 15px;
+    text-align: center;
+    list-style: none;
+    display: inline-block;
+    width: 80px;
+    line-height: 50px;
+}
+
+.edit-button-icon{
+    padding:0px;
+    margin:0px;
+    color: gold;
+    font-size: 3rem;
+    transition: 0.3;
+    cursor: pointer;
+}
+
+.edit-button-icon:hover{
+    font-size: 4rem;
+    color:orange;
+}
+
+.complete-button-icon-container{
+    padding:0px;
+    margin: 0px;
+    width: 20px;
+    padding-top: 15px;
+    text-align: center;
+    list-style: none;
+    display: inline-block;
+    width: 80px;
+    line-height: 50px;
+}
+
+.complete-button-icon{
+    padding:0px;
+    margin:0px;
+    color: gold;
+    font-size: 3rem;
+    transition: 0.3;
+    cursor: pointer;
+}
+
+.complete-button-icon:hover{
+    font-size: 4rem;
+    color:green;
+}
+
+
 
 
 @media only screen and(max-width:800px) {
