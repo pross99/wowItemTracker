@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext} from 'react'
 import './Hero.css'
 import Carousel from 'react-material-ui-carousel'
 import { Paper } from '@mui/material';
@@ -9,20 +9,59 @@ import { faCheck, faDeleteLeft } from '@fortawesome/free-solid-svg-icons';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios'
 import axiosInstance from '../../api/axiosConfig';
+import UserContext from '../UserContext'
 
 
 // const url = 'https://f30b-87-63-77-53.ngrok-free.app//api/v1/items/${wowheaditemId}'
 
+const Hero = ({ items, onDelete, onEdit, onComplete}) => {
+ 
+    
+    const { userId } = useContext(UserContext);
+    const [imageUrls, setImageUrls] = useState ({})
+    const {user} = useContext(UserContext);
+    
+    
+     
+       useEffect(() => {
+    console.log( "and items:", items); // Debug log to show userId and items
+    console.log("Items length:", items.length); // Log length of items
+        if (!user.userId) {
+        console.log("No userId available yet, skipping fetch");
+        return; // Don't fetch if there's no userId
+    }
+    
+     if (items.length === 0) {
+        console.log("No items available yet, skipping fetch");
+        return; // Don't fetch if items haven't loaded yet
+    }
+
+    const fetchImageUrls = async () => {
+       console.log("Fetching image URLs for items");
+        const urls = {};
+
+    for (const item of items) {
+            try {
+                console.log(item.wowheadId + "HERO Are there any ids?")
+                const response = await axiosInstance.get(`/api/v1/items/${item.wowheadId}`);
+                console.log(response.data)
+                urls[item.wowheadId] = response.data.backdrops; // Store image URL
+                console.log(`Fetched image URL for item ${item.wowheadId}:`, response.data.backdrops);
+            } catch (error) {
+               console.error(`Could not fetch image for ${item.wowheadId}:`, error);
+            }
+        }
+
+        setImageUrls(urls); // Update state with the fetched URLs
+    
+    };
+
+    fetchImageUrls(); // Call the function when both items and userId are available
+    }, [items, userId]);  // now depends on both items and userId
 
 
 
 
-
-
-
-
-
-const Hero = ({ items, onDelete, onEdit, onComplete }) => {
     const handleDelete = async (wowheadId) => {
         try {
           await axiosInstance.delete(`/api/v1/items/${wowheadId}`);
@@ -34,7 +73,7 @@ const Hero = ({ items, onDelete, onEdit, onComplete }) => {
       };
 
       const handleOnDelete = (wowheadId) => {
-        console.log('onDelete called with wowheadId:', wowheadId );
+      //  console.log('onDelete called with wowheadId:', wowheadId );
         onDelete(wowheadId)
       }
 
@@ -43,46 +82,22 @@ const Hero = ({ items, onDelete, onEdit, onComplete }) => {
             await axiosInstance.put(`/api/v1/items/${wowheadId}`);
         }
       } */
-
-
-
-
-
-const [imageUrls, setImageUrls] = useState ({})
-
-useEffect(() => {
-    const fetchImageUrls = async () => {
-    const urls = {};
-
-    for (const item of items) {
-        try {
-            const response = await axiosInstance.get(`/api/v1/items/${item.wowheadId}`)
-            urls[item.wowheadId] = response.data.backdrops; // { imageUrl is "backdrops": '...' }
-        } catch (eeror) {
-            console.error(`Could not fetch image for${item.wowheadId}:`, error) 
-        }
-        }
-        setImageUrls(urls);
-    };
-
-    if(items.length > 0) {
-        fetchImageUrls();
-    }
-},[items])
+  
+       
 
     return (
         <div className='item-carousel-container'>
 
             <Carousel>
-                {items && items.length > 0 ? (
+            {items && items.length > 0 ? (
                     items.map((item) => {
                         return (
-                            <Paper key={item.wowheadId}> {/* Use unique wowheahId */}
-                                <div className='item-card-container' >
-                                    <div className='item-card' style={{ "--img": `url(${wowheadpng})` }} >
-                                        <div className='item-detail'>
-                                            <div className='item-poster'>
-                                            <img src={item.backdrops}  alt="" />
+                        <Paper key={item.wowheadId}> {/* Use unique wowheahId */}
+                            <div className='item-card-container' >
+                                <div className='item-card' style={{ "--img": `url(${wowheadpng})` }} >
+                                    <div className='item-detail'>
+                                        <div className='item-poster'>
+                                            <img src={imageUrls[item.wowheadId] || item.backdrops}  alt="" />
                                         </div>
                                         <div className='item-title'>
                                             <div className='item-column'>
@@ -110,7 +125,7 @@ useEffect(() => {
                                                 <h3 className='column-title'> Slot</h3>
                                                 <h4 className='column-answer'> {item.slot}</h4>
                                             </div>
-                                            <div className="item-buttons-contianer">
+                                            <div className="item-buttons-container">
                                                 <div className="delete-button-icon-container">
                                                     <FontAwesomeIcon onClick={() => handleDelete(item.wowheadId)} className="delete-button-icon"
                                                      icon ={faDeleteLeft}
@@ -134,29 +149,16 @@ useEffect(() => {
                                                 </div>
                                             </div>
                                         </div>
-                                     
-                                          
-
-                                      
-
-
-                                        </div>
-                                        
-
-
                                     </div>
-
-
-
                                 </div>
-
-                            </Paper>
+                            </div>
+                        </Paper>
                         )
                     })
                 ) : (
                     <div> No items to display? Remember to start server and update ngrok in axiosConfig.js & AddItem.js</div>
                 )
-                }
+            }
             </Carousel>
         </div>
     )

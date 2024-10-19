@@ -10,6 +10,8 @@ export default function Login(props) {
     const [error, setError] = useState(null); // FOR ERRORS
     const [isLoading, setIsLoading] = useState(false)
     const {setUser} = useContext(UserContext); //  Get the setUser finction form context
+    const {userId, setUserId} = useState ('')
+    const {login} = useContext(UserContext)
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -23,15 +25,21 @@ export default function Login(props) {
               .then(response => {
                 console.log(response)
                 console.log(response.data.username)
+                console.log("LOOK HERE", response.data.userId)
                 const loggedInUser = response.data.username;
+                const loggedUserId = response.data.userId
+                const loggedinUserId = response.data.userId
 
                 setUser({username: loggedInUser});
-
+                setUser({userId: loggedinUserId});
+                login({userId: loggedUserId})
+console.log("LOGIN", loggedInUser)
                 props.toggle();
               });
               
             } catch (error) {
                 setError("Login failed. Please check your credentials.");
+                console.log(error);
             } finally {
                 setIsLoading(false);
             }

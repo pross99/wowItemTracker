@@ -34,9 +34,10 @@ const Header = () => {
                     <NavLink className="nav-link" to="/Add">Add item</NavLink>
                 </Nav>
                 {user ? (
-                    <p style={{marginRight: 50}}>Welcome,{user.username}!</p>
+                    <p style={{marginRight: 50}}>Welcome, {user.username} {user.userId}!</p>
                 ) : (
                   <>
+                  <p style={{paddingRight: 10}}>Register or login to start your item tracking journey</p>
                   <Button variant="outline-info" onClick={togglePop} className="me-2">Login</Button>
                   <Button variant="outline-info" className="me-2">Register</Button>
                   </>
