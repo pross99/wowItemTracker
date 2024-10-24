@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import UserContext from '../UserContext'
 import Button from "react-bootstrap/Button"
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axiosInstance from '../../api/axiosConfig';
 
-function AddItem() {
+function AddItem({onItemAdded}) {
   const [itemName, setItemName] = useState('Corrupted Ashbringer');
   const [wowHeadId, setWowHeadId] = useState('item=22691');
   const [slot, setSlot] = useState('Two-hand Sword');
@@ -13,6 +14,7 @@ function AddItem() {
   const [expansion, setExpansion] = useState('Classic');
   const [location, setLocation] = useState('Naxxramas');
   const [backdrops, setBackdrops] = useState('https://wow.zamimg.com/uploads/screenshots/normal/1078514-corrupted-ashbringer.jpg');
+  const {user} = useContext(UserContext); // Get current user
 
  const notify = () =>  toast.success('Item added', {
     position: "bottom-center",
@@ -39,7 +41,8 @@ function AddItem() {
           wowHeadLink: wowHeadLink,
           expansion: expansion,
           location: location,
-          backdrops: backdrops
+          backdrops: backdrops,
+          userId: user.userId
         });
 
         console.log(response.data)
@@ -51,10 +54,15 @@ function AddItem() {
         setWowHeadLink('');
          setExpansion('');
          setLocation('');
-         setBackdrops(''); 
-
+         setBackdrops('');
+console.log(user.userId);
          notify()
          
+if (onItemAdded) {
+  onItemAdded();
+}
+
+
 
 }catch(err){
     console.log(err)
@@ -95,7 +103,7 @@ function AddItem() {
 
 
     
-      <button type="submit" className="btn btn-success" onClick={notify}>Add</button>
+      <button type="submit" className="btn btn-success">Add</button>
       <ToastContainer
 position="bottom-center"
 autoClose={5000}

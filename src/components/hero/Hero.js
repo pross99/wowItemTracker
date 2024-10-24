@@ -24,12 +24,6 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
     
      
        useEffect(() => {
-    console.log( "and items:", items); // Debug log to show userId and items
-    console.log("Items length:", items.length); // Log length of items
-        if (!user.userId) {
-        console.log("No userId available yet, skipping fetch");
-        return; // Don't fetch if there's no userId
-    }
     
      if (items.length === 0) {
         console.log("No items available yet, skipping fetch");
@@ -57,7 +51,7 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
     };
 
     fetchImageUrls(); // Call the function when both items and userId are available
-    }, [items, userId]);  // now depends on both items and userId
+    }, [items]);  // now depends on both items and userId
 
 
 

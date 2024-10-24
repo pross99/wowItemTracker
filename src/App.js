@@ -9,16 +9,17 @@ import Layout from './components/Layout'
 import AddItem from "./components/addItem/AddItem"
 import UserContext from './components/UserContext';
 
-
-
-
 function App() {
 // added []
   const [items, setItems] = useState([]);
   const {userId} = useContext(UserContext);
+
+
+
   const handleDelete = (itemId) => {
     setItems(items.filter((item) => item.id !== itemId))
   };
+
 
 
  const getItems = async () => {
@@ -28,8 +29,9 @@ function App() {
 
   }
 
-  const userIdString =  userId.userId;
+
     try{
+        const userIdString =  userId.userId;
       console.log("APP HELLO", userId.userId)
       console.log("APP userId ", userId.userId)
       const response = await api.get(`/api/v1/items/user/${userIdString}`); // Update the API endpoint
@@ -44,15 +46,13 @@ function App() {
 
 useEffect(() => {
   if (userId) {
-    getItems(); // Fetch items when the component mounts or when userId changes
     console.log("APP You logged in! wiht ID", userId)
     console.log ("APP With items", items)
-    
-  }
-}, [userId], [items]); // Add userId as a dependency - should only fetch is user is set
-
-
-
+    getItems(); // Fetch items when the component mounts or when userId changes
+     
+  } console.log("no user found!");
+},[userId]);
+ 
 
   return (
       <div className="App">  
@@ -60,7 +60,7 @@ useEffect(() => {
    <Routes>
     <Route path="/" element={<Layout/>}>
       <Route path="/" element={<Home items={items} onDelete={handleDelete}/>} ></Route>
-        <Route path="/Add" element={<AddItem/>} ></Route>  
+        <Route path="/Add" element={<AddItem onItemAdded={getItems}/>} ></Route>  
     </Route>
    </Routes>
     </div> 
