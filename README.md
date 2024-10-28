@@ -1,5 +1,5 @@
 
-This project is a front-end application built with React, designed to interact with Transmog API https://github.com/pross99/Transmogapi. It allows users to create,update and manage wanted items in a game.
+This project is a front-end application built with React, designed to interact with Transmog API https://github.com/pross99/Transmogapi. It allows users to create,update and manage wanted cosmetics from the game World Of Warcraft.
 
 Installation
 Clone the repository:
