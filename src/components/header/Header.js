@@ -7,12 +7,15 @@ import Navbar from "react-bootstrap/Navbar"
 import {NavLink} from "react-router-dom"
 import { useState, useContext } from 'react'
 import UserContext from '../UserContext'
+import AuthContext, { useAuth } from '../login/AuthProvider'
 import Login from '../login/Login'
 
 const Header = () => {
 
     const [seen, setSeen] = useState(false)
-    const {user} = useContext(UserContext); // Get the user from context
+   // const {user} = useContext(UserContext); // Get the user from context
+    const { user, isLoggedIn } = useAuth();
+    console.log()
     function togglePop () {
         setSeen (!seen);
     };
@@ -33,8 +36,8 @@ const Header = () => {
                     <NavLink className="nav-link" to="/">Home</NavLink>
                     <NavLink className="nav-link" to="/Add">Add item</NavLink>
                 </Nav>
-                {user ? (
-                    <p style={{marginRight: 50}}>Welcome, {user.username} {user.userId}!</p>
+                {isLoggedIn ? (
+                    <p style={{marginRight: 50}}>Welcome, {user.username}!</p>
                 ) : (
                   <>
                   <p style={{paddingRight: 10}}>Register or login to start your item tracking journey</p>

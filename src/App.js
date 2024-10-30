@@ -8,13 +8,14 @@ import Header from "./components/header/Header"
 import Layout from './components/Layout'
 import AddItem from "./components/addItem/AddItem"
 import UserContext from './components/UserContext';
+import { useAuth } from './components/login/AuthProvider';
 
 function App() {
 // added []
   const [items, setItems] = useState([]);
-  const {userId} = useContext(UserContext);
-
-
+ // const {userId} = useContext(UserContext);
+ // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user, isLoggedIn,setIsLoggedIn } = useAuth();
 
   const handleDelete = (itemId) => {
     setItems(items.filter((item) => item.id !== itemId))
@@ -23,7 +24,7 @@ function App() {
 
 
  const getItems = async () => {
-  if (!userId) {
+  if (!user.userId) {
     console.log("APP User ID is not available, cannot fetch items.");
     return; // Don't fetch items if userId is not set
 
@@ -31,9 +32,9 @@ function App() {
 
 
     try{
-        const userIdString =  userId.userId;
-      console.log("APP HELLO", userId.userId)
-      console.log("APP userId ", userId.userId)
+        const userIdString =  user.userId;
+      console.log("APP HELLO", user.userId)
+      console.log("APP userId ", user.userId)
       const response = await api.get(`/api/v1/items/user/${userIdString}`); // Update the API endpoint
       const objectIds = items.map(item => item.userId);
       console.log(response.data, "Tell me what you want");
@@ -45,13 +46,22 @@ function App() {
 };
 
 useEffect(() => {
-  if (userId) {
-    console.log("APP You logged in! wiht ID", userId)
+  if (user) {
+    console.log("APP You logged in! wiht ID", user.userId)
     console.log ("APP With items", items)
     getItems(); // Fetch items when the component mounts or when userId changes
      
   } console.log("no user found!");
-},[userId]);
+},[user]);
+
+
+useEffect(() => {
+  const token = localStorage.getItem('token');
+  if (token) {
+  // setIsLoggedIn(true);
+  setIsLoggedIn
+  }
+}, []);
  
 
   return (

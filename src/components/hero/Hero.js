@@ -10,7 +10,7 @@ import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios'
 import axiosInstance from '../../api/axiosConfig';
 import UserContext from '../UserContext'
-
+import { useAuth } from '../login/AuthProvider'
 
 // const url = 'https://f30b-87-63-77-53.ngrok-free.app//api/v1/items/${wowheaditemId}'
 
@@ -19,8 +19,8 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
     
     const { userId } = useContext(UserContext);
     const [imageUrls, setImageUrls] = useState ({})
-    const {user} = useContext(UserContext);
-    
+   // const {user} = useContext(UserContext);
+    const { user, isLoggedIn } = useAuth();
     
      
        useEffect(() => {
@@ -150,7 +150,7 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
                         )
                     })
                 ) : (
-                    <div> No items to display? Remember to start server and update ngrok in axiosConfig.js & AddItem.js</div>
+                    <div> No items to display? Login to view your saved item list</div>
                 )
             }
             </Carousel>
