@@ -11,8 +11,7 @@ export default function Login(props) {
     const [password, setPassword] = useState ('')
     const [error, setError] = useState(null); // FOR ERRORS
     const [isLoading, setIsLoading] = useState(false)
-    const { setUser } = useContext(UserContext); //  Get the setUser finction form context
-    const {userId, setUserId} = useState ('')
+    const { setUser } = useContext(UserContext); //  Get the setUser finction form context - has been refactored, marked for deletion
     const { login } = useContext(UserContext)
     const { login2 } = useAuth();
 
@@ -31,27 +30,23 @@ export default function Login(props) {
                   username: response.data.username, // Username of the logged-in user
                   userId: response.data.userId,
                 }
-                console.log("USERDATA FOUND FROM LOGIN",userData)
-        const decoded = jwtDecode(token);
-        console.log("New token decoded:", decoded);
-        console.log("Token exp:", decoded.exp * 1000);
-        console.log("Current time:", Date.now());
-        console.log("Time until expiry (minutes):", 
-            Math.round((decoded.exp * 1000 - Date.now()) / 1000 / 60));
+              const decoded = jwtDecode(token);
+
+               console.log("New token decoded:", decoded);
+              console.log("Token exp:", decoded.exp * 1000);
+              console.log("Current time:", Date.now());
+              console.log("Time until expiry (minutes):", 
+              Math.round((decoded.exp * 1000 - Date.now()) / 1000 / 60));
                 console.log(response)
-                console.log(response.data.username)
-                console.log("LOOK HERE", response.data.userId)
-                const loggedInUser = response.data.username;
+               /*  const loggedInUser = response.data.username;
                 const loggedUserId = response.data.userId
                 const loggedinUserId = response.data.userId
                 setUser({username: loggedInUser}); // Need to set the fetched user in order to fetch associated items and username display
-                setUser({userId: loggedinUserId});
+                setUser({userId: loggedinUserId});  Has been refractored, marked for deletion */ 
                 login({userId: loggedUserId});
                 
                 login2(token,userData) // using the function from AuthProvider
-                console.log(response.data.token)
 
-console.log("LOGIN", loggedInUser)
                 props.toggle();
               });
               

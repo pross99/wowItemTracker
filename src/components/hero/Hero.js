@@ -150,8 +150,8 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
                         )
                     })
                 ) : (
-                    <div> No items to display? Login to view your saved item list</div>
-                )
+                    <div> No items to display? Start creating your wishlist on the "Add item" page or login to view your saved item list. If you are testing, you can login with U: "testuser" PW: "testpass" </div>
+                )   
             }
             </Carousel>
         </div>

@@ -9,17 +9,26 @@ import { useState, useContext } from 'react'
 import UserContext from '../UserContext'
 import AuthContext, { useAuth } from '../login/AuthProvider'
 import Login from '../login/Login'
+import Register from '../login/Register'
 
 const Header = () => {
 
-    const [seen, setSeen] = useState(false)
+    /* const [seen, setSeen] = useState(false)  split in to two with showLogin and showRegister */
+    const [showLogin, setShowLogin] = useState(false);
+    const [showRegister, setShowRegister] = useState(false); 
    // const {user} = useContext(UserContext); // Get the user from context
     const { user, isLoggedIn } = useAuth();
-    console.log()
-    function togglePop () {
-        setSeen (!seen);
-    };
 
+
+    console.log()
+    const toggleLogin = () => {
+        setShowLogin(!showLogin);
+        if (showRegister) setShowRegister(false) // close registration popup if active
+    };
+    const toggleRegistration = () => {
+        setShowRegister(!showRegister);
+        if (showLogin) setShowLogin(false) // close login popup if active
+    };
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
@@ -41,13 +50,14 @@ const Header = () => {
                 ) : (
                   <>
                   <p style={{paddingRight: 10}}>Register or login to start your item tracking journey</p>
-                  <Button variant="outline-info" onClick={togglePop} className="me-2">Login</Button>
-                  <Button variant="outline-info" className="me-2">Register</Button>
+                  <Button variant="outline-info" onClick={toggleLogin} className="me-2">Login</Button>
+                  <Button variant="outline-info" onClick={toggleRegistration} className="me-2">Register</Button>
                   </>
                     
                 )}
                 
-                {seen ? <Login toggle={togglePop} /> : null}
+                {showLogin ? <Login toggle={toggleLogin} /> : null}
+                {showRegister ? <Register toggle={toggleRegistration} />: null}
                 
             </Navbar.Collapse>
         </Container>
