@@ -43,7 +43,7 @@ export default function Login(props) {
                 const loggedinUserId = response.data.userId
                 setUser({username: loggedInUser}); // Need to set the fetched user in order to fetch associated items and username display
                 setUser({userId: loggedinUserId});  Has been refractored, marked for deletion */ 
-                login({userId: loggedUserId});
+               // login({userId: loggedUserId});
                 
                 login2(token,userData) // using the function from AuthProvider
 
