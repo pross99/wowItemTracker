@@ -6,7 +6,6 @@ import Nav from "react-bootstrap/Nav"
 import Navbar from "react-bootstrap/Navbar"
 import {NavLink} from "react-router-dom"
 import { useState, useContext } from 'react'
-import UserContext from '../UserContext'
 import AuthContext, { useAuth } from '../login/AuthProvider'
 import Login from '../login/Login'
 import Register from '../login/Register'
@@ -20,7 +19,7 @@ const Header = () => {
     const { user, isLoggedIn } = useAuth();
 
 
-    console.log()
+
     const toggleLogin = () => {
         setShowLogin(!showLogin);
         if (showRegister) setShowRegister(false) // close registration popup if active
@@ -56,11 +55,11 @@ const Header = () => {
                     
                 )}
                 
-                {showLogin ? <Login toggle={toggleLogin} /> : null}
-                {showRegister ? <Register toggle={toggleRegistration} />: null}
                 
             </Navbar.Collapse>
         </Container>
+        {showLogin ? <Login toggle={toggleLogin} /> : null}
+        {showRegister ? <Register toggle={toggleRegistration} />: null}
     </Navbar>
   )
 }

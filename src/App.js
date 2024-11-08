@@ -21,7 +21,10 @@ function App() {
     setItems(items.filter((item) => item.id !== itemId))
   };
 
-
+ const handleEditComplete = async (updatedItem) => {
+    // Refresh the items list after an edit
+    await getItems();
+};
 
  const getItems = async () => {
   if (!user.userId) {
@@ -29,7 +32,7 @@ function App() {
     return; // Don't fetch items if userId is not set
 
   }
-
+ 
 
     try{
         const userIdString =  user.userId;
@@ -37,8 +40,6 @@ function App() {
       console.log("APP userId ", user.userId)
       const response = await api.get(`/api/v1/items/user/${userIdString}`); // Update the API endpoint
       const objectIds = items.map(item => item.userId);
-      console.log(response.data, "Tell me what you want");
-      console.log(objectIds);
       setItems(response.data); // Set the items in state
   } catch (err) {
       console.error("APP Error fetching items:", err);
@@ -69,7 +70,7 @@ useEffect(() => {
       <Header/>
    <Routes>
     <Route path="/" element={<Layout/>}>
-      <Route path="/" element={<Home items={items} onDelete={handleDelete}/>} ></Route>
+      <Route path="/" element={<Home items={items} onDelete={handleDelete} onEdit={handleEditComplete} />} ></Route>
         <Route path="/Add" element={<AddItem onItemAdded={getItems}/>} ></Route>  
     </Route>
    </Routes>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext} from 'react'
+import React, { useEffect, useState, useContext, useCallback} from 'react'
 import './Hero.css'
 import Carousel from 'react-material-ui-carousel'
 import { Paper } from '@mui/material';
@@ -11,6 +11,7 @@ import axios from 'axios'
 import axiosInstance from '../../api/axiosConfig';
 import UserContext from '../UserContext'
 import { useAuth } from '../login/AuthProvider'
+import EditItem from '../editItem/EditItem';
 
 // const url = 'https://f30b-87-63-77-53.ngrok-free.app//api/v1/items/${wowheaditemId}'
 
@@ -21,9 +22,45 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
     const [imageUrls, setImageUrls] = useState ({})
    // const {user} = useContext(UserContext);
     const { user, isLoggedIn } = useAuth();
+    const [showDelete, setShowDelete] = useState(false);
+    const [showComplete, setShowComplete] = useState(false);
+    const [itemToEdit, setItemToEdit] = useState(null); // the specific item that needs editing
+
+
     
-     
-       useEffect(() => {
+ /*    const toggleDelete = () => {
+        setShowDelete(!showDelete);
+        if(showEdit || showComplete) setShowEdit(false) && setShowComplete(false)
+    };
+
+    const toggleComplete = () => {
+        setShowComplete(!setShowComplete);
+        if(showDelete || showEdit) setShowDelete(fasle) && setShowComplete(false)
+    }; */
+    
+    const handleEditItem = (item) => {
+        setItemToEdit(item);
+    };
+
+    const handleEditComplete = async (updatedItem) => {
+        setItemToEdit(null);
+        // Update the local items list
+        setLocalItems(prevItems => 
+            prevItems.map(item => 
+                item.wowheadId === updatedItem.wowheadId ? updatedItem : item
+            )
+        );
+        // If parent provided onEdit callback, call it
+        if (onEdit) {
+            onEdit(updatedItem);
+        }
+    };
+
+    const handleCloseEdit = () => {
+        setItemToEdit(null);
+    };
+
+    useEffect(() => {
     
      if (items.length === 0) {
         console.log("No items available yet, skipping fetch");
@@ -52,33 +89,8 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
 
     fetchImageUrls(); // Call the function when both items and userId are available
     }, [items]);  // now depends on both items and userId
-
-
-
-
-    const handleDelete = async (wowheadId) => {
-        try {
-          await axiosInstance.delete(`/api/v1/items/${wowheadId}`);
-          console.log(wowheadId)
-          onDelete(wowheadId);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-
-      const handleOnDelete = (wowheadId) => {
-      //  console.log('onDelete called with wowheadId:', wowheadId );
-        onDelete(wowheadId)
-      }
-
- /*      const handleEdit = async (wowheadId) => {
-        try {
-            await axiosInstance.put(`/api/v1/items/${wowheadId}`);
-        }
-      } */
-  
        
-
+console.log(itemToEdit)
     return (
         <div className='item-carousel-container'>
 
@@ -131,6 +143,7 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
                                                 <div className="edit-button-icon-container">
                                                     <FontAwesomeIcon className= "edit-button-icon"
                                                     icon ={faPenToSquare}
+                                                    onClick={() => handleEditItem(item)}
                                                     />
                                                 </div>
                                             </div>
@@ -141,11 +154,14 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
                                                     icon ={faCheck}
                                                     />
                                                 </div>
+                                                
                                             </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                           
                         </Paper>
                         )
                     })
@@ -154,6 +170,11 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
                 )   
             }
             </Carousel>
+             {/* Render EditItem outside the map loop, conditionally showing it based on showEdit and itemToEdit */}
+            {itemToEdit && <EditItem 
+            item={itemToEdit} 
+            onEdit={handleEditComplete} 
+            toggle={handleCloseEdit} />} 
         </div>
     )
 }
