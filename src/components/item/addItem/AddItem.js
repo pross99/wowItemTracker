@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
-import UserContext from '../UserContext'
+import UserContext from '../../UserContext'
 import Button from "react-bootstrap/Button"
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axiosInstance from '../../api/axiosConfig';
+import axiosInstance from '../../../api/axiosConfig';
 
 function AddItem({onItemAdded}) {
   const [itemName, setItemName] = useState('Corrupted Ashbringer');
@@ -25,13 +25,12 @@ function AddItem({onItemAdded}) {
     draggable: true,
     progress: undefined,
     theme: "dark",
-    });;
+    });
       
 
   const handleSubmit = async (event) => {
     event.preventDefault();
    
- // FIX URL
     
     try {
         const response = await axiosInstance.post('/api/v1/items/post', {

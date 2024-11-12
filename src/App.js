@@ -6,8 +6,7 @@ import {Routes, Route} from 'react-router-dom';
 import Home from './components/home/Home'
 import Header from "./components/header/Header"
 import Layout from './components/Layout'
-import AddItem from "./components/addItem/AddItem"
-import UserContext from './components/UserContext';
+import AddItem from "./components/item/addItem/AddItem"
 import { useAuth } from './components/login/AuthProvider';
 
 function App() {
@@ -17,8 +16,8 @@ function App() {
  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { user, isLoggedIn,setIsLoggedIn } = useAuth();
 
-  const handleDelete = (itemId) => {
-    setItems(items.filter((item) => item.id !== itemId))
+  const handleDeleteComplete = async (deletedItem) => {
+    await getItems();
   };
 
  const handleEditComplete = async (updatedItem) => {
@@ -70,7 +69,7 @@ useEffect(() => {
       <Header/>
    <Routes>
     <Route path="/" element={<Layout/>}>
-      <Route path="/" element={<Home items={items} onDelete={handleDelete} onEdit={handleEditComplete} />} ></Route>
+      <Route path="/" element={<Home items={items} onDelete={handleDeleteComplete} onEdit={handleEditComplete} />} ></Route>
         <Route path="/Add" element={<AddItem onItemAdded={getItems}/>} ></Route>  
     </Route>
    </Routes>

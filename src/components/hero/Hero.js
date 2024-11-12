@@ -3,16 +3,14 @@ import './Hero.css'
 import Carousel from 'react-material-ui-carousel'
 import { Paper } from '@mui/material';
 import wowheadpng from '../../images/wowhead.png'
-import { padding } from '@mui/system';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faDeleteLeft } from '@fortawesome/free-solid-svg-icons';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios'
 import axiosInstance from '../../api/axiosConfig';
 import UserContext from '../UserContext'
 import { useAuth } from '../login/AuthProvider'
-import EditItem from '../editItem/EditItem';
-
+import EditItem from '../item/editItem/EditItem';
+import DeleteItem from '../item/deleteItem/DeleteItem';
 // const url = 'https://f30b-87-63-77-53.ngrok-free.app//api/v1/items/${wowheaditemId}'
 
 const Hero = ({ items, onDelete, onEdit, onComplete}) => {
@@ -22,21 +20,13 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
     const [imageUrls, setImageUrls] = useState ({})
    // const {user} = useContext(UserContext);
     const { user, isLoggedIn } = useAuth();
-    const [showDelete, setShowDelete] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState(null);
     const [showComplete, setShowComplete] = useState(false);
     const [itemToEdit, setItemToEdit] = useState(null); // the specific item that needs editing
 
 
-    
- /*    const toggleDelete = () => {
-        setShowDelete(!showDelete);
-        if(showEdit || showComplete) setShowEdit(false) && setShowComplete(false)
-    };
 
-    const toggleComplete = () => {
-        setShowComplete(!setShowComplete);
-        if(showDelete || showEdit) setShowDelete(fasle) && setShowComplete(false)
-    }; */
+
     
     const handleEditItem = (item) => {
         setItemToEdit(item);
@@ -56,8 +46,32 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
         }
     };
 
+
+    const handleDeleteItem = (item) => {
+        setItemToDelete(item);
+    };
+    const handleDeleteComplete = async (deletedItem) => {
+        //Remove item with the given wowheadId
+        setItemToDelete(null);
+        setLocalItems(prevItems =>
+            prevItems.filter(item =>
+                item.wowheadId !== deletedItem.wowheadId)
+            );
+        if (onDelete) {
+            onDelete(deletedItem)
+        }
+
+    }
+
     const handleCloseEdit = () => {
+    
+        setTimeout(() => {
         setItemToEdit(null);
+        setItemToDelete(null);
+
+
+        },800)
+        
     };
 
     useEffect(() => {
@@ -90,7 +104,6 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
     fetchImageUrls(); // Call the function when both items and userId are available
     }, [items]);  // now depends on both items and userId
        
-console.log(itemToEdit)
     return (
         <div className='item-carousel-container'>
 
@@ -133,8 +146,9 @@ console.log(itemToEdit)
                                             </div>
                                             <div className="item-buttons-container">
                                                 <div className="delete-button-icon-container">
-                                                    <FontAwesomeIcon onClick={() => handleDelete(item.wowheadId)} className="delete-button-icon"
+                                                    <FontAwesomeIcon className="delete-button-icon"
                                                      icon ={faDeleteLeft}
+                                                     onClick={() => handleDeleteItem(item)}
                                                     />
                                                    
                                                 </div>
@@ -166,7 +180,9 @@ console.log(itemToEdit)
                         )
                     })
                 ) : (
-                    <div> No items to display? Start creating your wishlist on the "Add item" page or login to view your saved item list. If you are testing, you can login with U: "testuser" PW: "testpass" </div>
+                    <div> No items to display? Start creating your wishlist on the "Add item" page or login to view your saved item list. If you are testing, you can login with U: "testuser" PW: "testpass" 
+                        when logging in the first time you might experince a slow login, as the backend is hosted with a free subscription. This allows the system to be available at all times. In a dream senario, the front end project will be published on a domain.
+                    </div>
                 )   
             }
             </Carousel>
@@ -174,7 +190,16 @@ console.log(itemToEdit)
             {itemToEdit && <EditItem 
             item={itemToEdit} 
             onEdit={handleEditComplete} 
-            toggle={handleCloseEdit} />} 
+            toggle={handleCloseEdit} 
+            />
+            }
+
+            {itemToDelete && <DeleteItem
+            item={itemToDelete}
+            onDelete={handleDeleteComplete}
+            toggle={handleCloseEdit}    
+            />
+            } 
         </div>
     )
 }

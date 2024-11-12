@@ -2,11 +2,11 @@ import React from 'react'
 import Hero from '../hero/Hero'
 import spinnerLoader from '../SpinnerLoader/SpinnerLoader'
 import SpinnerLoader from '../SpinnerLoader/SpinnerLoader'
-const Home = ({items, onDelete, handleEditComplete}) => {
+const Home = ({items, handleDeleteItem, handleEditComplete}) => {
   return ( 
 
     <><SpinnerLoader/><div>
-      <Hero items={items} onDelete={onDelete} onEdit={handleEditComplete}/>
+      <Hero items={items} onDelete={handleDeleteItem} onEdit={handleEditComplete}/>
     </div></>
 
   )

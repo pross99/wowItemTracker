@@ -1,6 +1,9 @@
 import { useState, useContext } from "react";
-import axiosInstance from '../../api/axiosConfig';
-import { useAuth } from "../login/AuthProvider";
+import axiosInstance from '../../../api/axiosConfig';
+import { useAuth } from "../../login/AuthProvider";
+import './EditItem.css'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function EditItem(props) {
@@ -10,6 +13,23 @@ export default function EditItem(props) {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null); // FOR ERRORS
     const { user } = useAuth();
+
+
+
+    const notify = () =>  toast.success('Item Updated', {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      });
+
+
+
+
 
     const handleInputChange = (e) => {
           setEditedItem({ ...editedItem, [e.target.name]: e.target.value });
@@ -33,7 +53,8 @@ export default function EditItem(props) {
         };
 
           await axiosInstance.put(`/api/v1/items/${editedItem.wowheadId}`, itemToUpdate); 
-         props.toggle(); 
+          notify();
+          props.toggle(); 
         } catch (error) {
           setError("UPDATE FAILED")
           console.error(error);
@@ -69,23 +90,28 @@ export default function EditItem(props) {
                           />
                       </label>
 
-                      <label>
+                      <label 
+               
+                      >
                       Expansion:
                          
                         <select 
                         name= "expansion"
                         value = {editedItem.expansion}
-                          onChange={handleInputChange}>
+                          onChange={handleInputChange}
+                          style={{marginLeft: '10px' }}
+                          >
                           <option value="Classic">Classic</option>
-                          <option value="BC">BC</option>
-                          <option value="wotlk">wotlk</option>
-                          <option value="Cata">Cata</option>
-                          <option value="Pandaria">Pandaria</option>
-                          <option value="WOD">WOD</option>
-                          <option value="Legion">Legion</option>
-                          <option value="Shadowlands">Shadowlands</option>
-                          <option value="Dragonflight">Dragonflight</option>
-                          <option value="WW">WW</option>
+                          <option style={{backgroundColor:'rgba(203, 217, 107, 0.5)'}} value="BC">BC</option>
+                          <option style={{backgroundColor:'rgba(158, 198, 230, 0.5)'}} value="wotlk">wotlk</option>
+                          <option style={{backgroundColor:'rgba(211,75,28, 0.5)'}} value="Cata">Cata</option>
+                          <option style={{backgroundColor:'rgba(194,178,127, 0.5)'}} value="MOP">MOP</option>
+                          <option style={{backgroundColor:'rgba(58,18,0, 0.5)'}} value="WOD">WOD</option>
+                          <option style={{backgroundColor:'rgba(151,190,65, 0.5)'}} value="Legion">Legion</option>
+                          <option style={{backgroundColor:'rgba(66,58,49, 0.5)'}} value="BFA">BFA</option>
+                          <option style={{backgroundColor:'rgba(250, 248, 246, 0.5)'}} value="Shadowlands">Shadowlands</option>
+                          <option style={{backgroundColor:'rgba(128, 128, 128, 0.5)'}} value="Dragonflgiht">Dragonflight</option>
+                          <option style={{backgroundColor:'rgba(201, 24, 1, 0.5)'}} value="War within">War Within</option>
                         </select>
                       </label>
 
@@ -103,7 +129,9 @@ export default function EditItem(props) {
                         <select 
                         name= "slot"
                         value = {editedItem.slot}
-                        onChange={handleInputChange} >
+                        onChange={handleInputChange}
+                        style={{marginLeft: '10px' }}
+                        >
                         <option value="Helmet">Helmet</option>
                         <option value="Shoulders">Shoulders</option>
                         <option value="Chest">Chest</option>
@@ -129,6 +157,17 @@ export default function EditItem(props) {
                       <button type="submit" disabled={isLoading}>
                       {isLoading ? 'Updating...' : 'Update'}
                       </button>
+                      <ToastContainer
+                      position="bottom-center"
+                      autoClose={5000}
+                      hideProgressBar={false}
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+            theme="dark"/>
                   </form>
                   {error && <p style={{color: 'red'}}>{error}</p>}
                   <button onClick={props.toggle}>Close</button>
