@@ -4,6 +4,9 @@ import { useAuth } from "../../login/AuthProvider";
 import './EditItem.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-tooltip/dist/react-tooltip.css'
+import ReactTooltip from "react-tooltip";
+import  {Tooltip}  from 'react-tooltip'
 
 
 export default function EditItem(props) {
@@ -13,6 +16,7 @@ export default function EditItem(props) {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null); // FOR ERRORS
     const { user } = useAuth();
+    const [isTooltipHovered, setIsTooltipHovered] = useState(false);
 
 
 
@@ -79,7 +83,12 @@ export default function EditItem(props) {
                           />
                       </label>
 
-                      <label>
+                      <label
+                      style={{
+                        fontWeight: isTooltipHovered ? "bold" : "normal", // conditional styling for hovering
+                        color: isTooltipHovered ? "#570987" : "inherit", 
+                      }}
+                      >
                       wowHeadLink:
                           <input
                           type="text"
@@ -87,6 +96,10 @@ export default function EditItem(props) {
                           value={editedItem.wowHeadLink}
                            onChange={handleInputChange} 
                           required 
+                          style={{
+                            fontWeight: isTooltipHovered ? "bold" : "normal", // conditional styling for hovering
+                            color: isTooltipHovered ? "#570987" : "inherit", 
+                          }}
                           />
                       </label>
 
@@ -119,6 +132,7 @@ export default function EditItem(props) {
                            Obtainable from:
                           <input
                            type="text" 
+                           name = "location"
                            value={editedItem.location} 
                            onChange={handleInputChange} 
                            required 
@@ -142,7 +156,7 @@ export default function EditItem(props) {
                         <option value="Weapon">Weapon</option>
                         </select>
                       </label>
-
+                      <div>
                       <label>
                       Image link:
                           <input
@@ -150,10 +164,15 @@ export default function EditItem(props) {
                           name="backdrops"
                           value={editedItem.backdrops}
                            onChange={handleInputChange} 
-                          required 
+                          required
+                          data-tooltip-id = "image-tooltip"
+                          data-tooltip-content= {`Inspect the page on ${editedItem.wowHeadLink} and grab the imageurl for the item`}
+                          onMouseEnter={() => setIsTooltipHovered(true)} //highlight link above
+                          onMouseLeave={() => setIsTooltipHovered(false)} // highlight ends when hover is moved
                           />
+                           <Tooltip id="image-tooltip" place="top" type="dark" effect="solid" />
                       </label>
-                      
+                      </div>
                       <button type="submit" disabled={isLoading}>
                       {isLoading ? 'Updating...' : 'Update'}
                       </button>
