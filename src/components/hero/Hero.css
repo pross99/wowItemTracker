@@ -1,166 +1,194 @@
 .item-carousel-container{
     width: 99vw;
-
     background-color: black;
 }
 
+/* Poster/Image Styles */
 .item-poster{
     height: 200px;
     border: 1px solid gold;
     border-radius: 10px;
     overflow: hidden;
 }
-
-
 .item-poster > img{
     height: 100%;
     width: 100%;
 }
+/* Poster/Image end*/
+
+
 
 .item-card-container {
+    display: flex;
+    padding: 20px;
     height: 850px;
+    justify-content: center;
     background-color: black;
     
 }
 
 .item-card{
     background-repeat: no-repeat;
-    width: 100%;
+    border-radius: 8px;
+    padding-right: 50px;
+    width: 97%;
     height:  100%;
     background-size: cover;
     background-image: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,1)), var(--img);
+    box-shadow: 0 4Px 8px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+    position: relative;
+    overflow: hidden;
    
     
 
 }
 
-.item-detail{
-    position: absolute;
-    top: 200px;
-    display: flex;
-    justify-content: space-evenly;
-    width: 100%;
+.item-card:hover {
+    transform: translateY(5px);
 }
 
+.item-detail{
+    display: flex;
+    padding-left: 50px;
+    gap: 20px;
+}
+
+/* Title and Content Area */
 .item-title{
+    flex: 1;
     color:wheat;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Added for absolute positioning of buttons */
+    
+    
+}
+
+
+
+
+/* Link Styles */
+.item-column a {
+    text-decoration: none;
+}
+
+.item-column a .column-answer {
+    color: #00aeff;
+    transition: color 0.2s ease;
+}
+
+.item-column a:hover .column-answer {
+    color: #66ccff;
+}
+
+
+
+/* Column Styles */
+.item-column{
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
-    
-    
-}
-.item-title2{
-    color:wheat;
-    display: flex;
-    align-items:center;
-    justify-content: space-evenly;
-    position: relative;
-    
-}
-.item-column{
+    gap: 15px;
     padding: 10px;
     
 }
 
+
 .column-title{
     text-decoration: underline #F0E68C;
+    font-weight: 600;
+    margin: 0;
     
 }
 
 .column-answer{
-    padding-top: 30px;
+    font-size: 16px;
+    margin: 0;
 }
+
+
+
+
 .item-buttons-container{
+    right: 0;
+    top: 0;
     display: flex;
+    gap: 15px;
+    padding: 5px; 
+
+}
+
+/* button icons */
+
+.delete-button-icon-container,
+.edit-button-icon-container,
+.complete-button-icon-container {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 1px; 
 }
-.delete-button-icon-container{
-    padding:0px;
-    margin: 0px;
-    width: 20px;
-    padding-top: 15px;
-    text-align: center;
-    list-style: none;
-    display: inline-block;
-    width: 80px;
-    line-height: 50px;
+.delete-button-icon {
+    color: #ff4444;
 }
 
-.delete-button-icon{
-    padding:0px;
-    margin:0px;
-    color: gold;
-    font-size: 3rem;
-    transition: 0.3;
-    cursor: pointer;
+.edit-button-icon {
+    color: #00aeff;
 }
 
-.delete-button-icon:hover{
-    font-size: 4rem;
-    color:red
+.complete-button-icon {
+    color: #00ff00;
 }
 
-.edit-button-icon-container{
-    padding:0px;
-    margin: 0px;
-    width: 20px;
-    padding-top: 15px;
-    text-align: center;
-    list-style: none;
-    display: inline-block;
-    width: 80px;
-    line-height: 50px;
-}
 
-.edit-button-icon{
-    padding:0px;
-    margin:0px;
-    color: gold;
-    font-size: 3rem;
-    transition: 0.3;
-    cursor: pointer;
-}
-
-.edit-button-icon:hover{
-    font-size: 4rem;
-    color:orange;
-}
-
-.complete-button-icon-container{
-    padding:0px;
-    margin: 0px;
-    width: 20px;
-    padding-top: 15px;
-    text-align: center;
-    list-style: none;
-    display: inline-block;
-    width: 80px;
-    line-height: 50px;
-}
-
-.complete-button-icon{
-    padding:0px;
-    margin:0px;
-    color: gold;
-    font-size: 3rem;
-    transition: 0.3;
-    cursor: pointer;
-}
-
-.complete-button-icon:hover{
-    font-size: 4rem;
-    color:green;
+.delete-button-icon-container:hover,
+.edit-button-icon-container:hover,
+.complete-button-icon-container:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 
 
 
-@media only screen and(max-width:800px) {
-    .item-detail{
+/* Responsive Design */
+@media (max-width: 768px) {
+    .item-detail {
         flex-direction: column;
-        align-items: center;
-        top:20px
+    }
+
+    .item-poster {
+        flex: 0 0 auto;
+        max-width: 100%;
+    }
+
+    .item-column {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        padding-right: 40px; /* Added to prevent text from running under buttons */
+    }
+
+    .column-title {
+        min-width: auto;
+    }
+
+    /* Adjust button positioning for mobile */
+    .item-buttons-container {
+        position: static;
+        justify-content: flex-end;
+        margin-top: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .item-card-container {
+        padding: 10px;
+    }
+
+    .item-detail {
+        padding: 15px;
     }
 }

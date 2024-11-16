@@ -141,7 +141,7 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
                                             </div>
 
                                             <div className='item-column'>
-                                                <h3 className='column-title'> Slot</h3>
+                                                <h3 className='column-title'> Slot:</h3>
                                                 <h4 className='column-answer'> {item.slot}</h4>
                                             </div>
                                             <div className="item-buttons-container">
