@@ -4,9 +4,14 @@ import spinnerLoader from '../SpinnerLoader/SpinnerLoader'
 import SpinnerLoader from '../SpinnerLoader/SpinnerLoader'
 const Home = ({items, handleDeleteItem, handleEditComplete}) => {
   return ( 
-
-    <><SpinnerLoader/><div>
-      <Hero items={items} onDelete={handleDeleteItem} onEdit={handleEditComplete}/>
+    <><div>
+      {items && items.length > 0 ? (
+        <Hero items={items} onDelete={handleDeleteItem} onEdit={handleEditComplete}/>
+      ):
+      <SpinnerLoader/>
+         }
+   
+      
     </div></>
 
   )

@@ -1,6 +1,20 @@
 .item-carousel-container{
-    width: 99vw;
+    width: 50vw;
     background-color: black;
+    position: fixed;
+    overflow-y: hidden;
+    right: 0;
+}
+
+.avatar-container {
+    width: 50vw;
+    background-color: black;
+    position: fixed;
+    overflow-y: hidden;
+    left: 0;
+    display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
 }
 
 /* Poster/Image Styles */
@@ -39,16 +53,21 @@
     transition: transform 0.2s ease;
     position: relative;
     overflow: hidden;
-   
+    text-align: center;
     
-
 }
+.item-card h2 {
+    font-size: 42px;
+    color: gold;
+}
+
 
 .item-card:hover {
     transform: translateY(5px);
 }
 
 .item-detail{
+    padding-top: 155px;
     display: flex;
     padding-left: 50px;
     gap: 20px;

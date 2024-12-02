@@ -1,10 +1,15 @@
 import { useState, useContext } from "react";
 import './Login.css'
 import axiosInstance from "../../api/axiosConfig";
+import axios from "axios";
 import UserContext from "../UserContext";
 import { useAuth } from "./AuthProvider";
 import  {jwtDecode } from 'jwt-decode';
 
+
+
+//const credentials = btoa(`${BATTLE_NET_CLIENT_ID}:${BATTLE_NET_CLIENT_SECRET}`);
+//const secretEncoded = btoa(`${BATTLE_NET_CLIENT_SECRET}`)
 
 export default function Login(props) {
     const [username, setUsername] = useState ('')
@@ -15,40 +20,70 @@ export default function Login(props) {
     const { login } = useContext(UserContext)
     const { login2 } = useAuth();
 
+const BATTLE_NET_TOKEN = process.env.REACT_APP_BATTLE_NET_TOKEN;
+
     const handleLogin = async (e) => {
+     
         e.preventDefault();
        setIsLoading(true)
         setError(null) // reseting error state
             try {
-              await axiosInstance.post(`api/v1/auth/login`, {
+
+              const loginResponse = await axiosInstance.post(`api/v1/auth/login`, {
                 username,
                 password
-              })
-              .then(response => {
-                const token = response.data.token;
-                const userData = {
-                  username: response.data.username, // Username of the logged-in user
-                  userId: response.data.userId,
-                }
-              const decoded = jwtDecode(token);
-
-               console.log("New token decoded:", decoded);
-              console.log("Token exp:", decoded.exp * 1000);
-              console.log("Current time:", Date.now());
-              console.log("Time until expiry (minutes):", 
-              Math.round((decoded.exp * 1000 - Date.now()) / 1000 / 60));
-                console.log(response)
-               /*  const loggedInUser = response.data.username;
-                const loggedUserId = response.data.userId
-                const loggedinUserId = response.data.userId
-                setUser({username: loggedInUser}); // Need to set the fetched user in order to fetch associated items and username display
-                setUser({userId: loggedinUserId});  Has been refractored, marked for deletion */ 
-               // login({userId: loggedUserId});
-                
-                login2(token,userData) // using the function from AuthProvider
-
-                props.toggle();
               });
+
+
+       /*        const battleNetTokenResponse = await axios.post('https://oauth.battle.net/token',
+                new URLSearchParams({
+                  'grant_type': 'client_credentials'
+                }),
+                {
+                  auth: {
+                    username: BATTLE_NET_CLIENT_ID,
+                    password:  BATTLE_NET_CLIENT_SECRET
+                  },
+                  headers: {
+                   'Content-Type': 'application/x-www-form-urlencoded',
+                   
+                  }
+                }
+              ); */
+  
+           //   console.log(battleNetTokenResponse)
+  
+                const token = loginResponse.data.token;
+                const userData = {
+                  username: loginResponse.data.username, // Username of the logged-in user
+                  userId: loginResponse.data.userId,
+                  charName: loginResponse.data.charName,
+                  charServer: loginResponse.data.charServer,
+                 // battleNetAccessToken: battleNetTokenResponse.data.access_token // store access token from battlenet
+                }
+                console.log("YOUR ACCESS TOKEN WOOPWOOP", userData.battleNetAccessToken);
+               // const wowGetAvatar = await axios.get(`https://eu.api.blizzard.com/profile/wow/character/${userData.charServer}/${userData.charName}/character-media`, {
+                const wowGetAvatar = await axios.get(`https://springtransmogapi5-714423430443.europe-west1.run.app/api/v1/battle-net/character-avatar?server=${userData.charServer}&characterName=${userData.charName}&accessToken=${BATTLE_NET_TOKEN}`, {
+                  
+                })
+                console.log(wowGetAvatar.data)
+                const avatarData = wowGetAvatar.data
+                //const assets = wowGetAvatar.response.data.assets; // storing the assets array containing the needed image (main-raw)
+               // const mainRaw = assets.find(asset => asset.key == "main-raw");
+               /*  if(mainRaw) {
+                  const mainRawUrl=mainRaw.value;
+                } else {
+                  console.log("main-raw asset not found?")
+                }
+                const avatarData = {
+                  avatar: mainRaw
+                } */
+              
+
+              const decoded = jwtDecode(token);
+                login2(token,userData, avatarData) // using the function from AuthProvider
+                props.toggle();
+           
               
             } catch (error) {
                 setError("Login failed. Please check your credentials.");
@@ -75,6 +110,7 @@ export default function Login(props) {
                             Password:
                             <input type="password" value={password} onChange={e => setPassword(e.target.value)}
                             required />
+                            <p> HI {BATTLE_NET_TOKEN}</p>
                         </label>
                         <button type="submit" disabled={isLoading}>
                         {isLoading ? 'Logging in...' : 'Login'}

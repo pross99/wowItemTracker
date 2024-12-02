@@ -20,6 +20,7 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
     const [imageUrls, setImageUrls] = useState ({})
    // const {user} = useContext(UserContext);
     const { user, isLoggedIn } = useAuth();
+    const {avatarImage} = useAuth();
     const [itemToDelete, setItemToDelete] = useState(null);
     const [showComplete, setShowComplete] = useState(false);
     const [itemToEdit, setItemToEdit] = useState(null); // the specific item that needs editing
@@ -105,6 +106,12 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
     }, [items]);  // now depends on both items and userId
        
     return (
+        <div>
+            <div className='avatar-container'>
+                <img src={avatarImage}></img>
+            </div>
+
+       
         <div className='item-carousel-container'>
 
             <Carousel>
@@ -114,6 +121,7 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
                         <Paper key={item.wowheadId}> {/* Use unique wowheahId */}
                             <div className='item-card-container' >
                                 <div className='item-card' style={{ "--img": `url(${wowheadpng})` }} >
+                                    <h2>Tracked items</h2>
                                     <div className='item-detail'>
                                         <div className='item-poster'>
                                             <img src={imageUrls[item.wowheadId] || item.backdrops}  alt="" />
@@ -201,6 +209,7 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
             />
             } 
         </div>
+         </div>
     )
 }
 

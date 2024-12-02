@@ -11,6 +11,7 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [user, setUser] = useState(null);
+    const [avatarImage, setAvatarImage] = useState(null)
 
 
     useEffect(() => {
@@ -58,11 +59,12 @@ export const AuthProvider = ({ children }) => {
 
     }, []); // Empty dependency array means this runs once on mount
 
-    const login2 = (token, userData) =>  {
+    const login2 = (token, userData, avatarData) =>  {
         localStorage.setItem('token', token);
         localStorage.setItem('user',JSON.stringify(userData))
         setIsLoggedIn(true)
         setUser(userData)
+        setAvatarImage(avatarData)
     };
 
     const logout = () => {
@@ -71,7 +73,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, login2, logout, user, setIsLoggedIn }}>
+        <AuthContext.Provider value={{ isLoggedIn, login2, logout, user, avatarImage, setAvatarImage, setIsLoggedIn }}>
             {children}
         </AuthContext.Provider>
     );
