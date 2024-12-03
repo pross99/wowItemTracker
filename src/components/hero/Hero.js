@@ -11,6 +11,7 @@ import UserContext from '../UserContext'
 import { useAuth } from '../login/AuthProvider'
 import EditItem from '../item/editItem/EditItem';
 import DeleteItem from '../item/deleteItem/DeleteItem';
+import SpinnerLoader from '../SpinnerLoader/SpinnerLoader'
 // const url = 'https://f30b-87-63-77-53.ngrok-free.app//api/v1/items/${wowheaditemId}'
 
 const Hero = ({ items, onDelete, onEdit, onComplete}) => {
@@ -104,6 +105,8 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
 
     fetchImageUrls(); // Call the function when both items and userId are available
     }, [items]);  // now depends on both items and userId
+
+    
        
     return (
         <div>
@@ -188,8 +191,11 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
                         )
                     })
                 ) : (
+                    <div>
+                    <SpinnerLoader />
                     <div> No items to display? Start creating your wishlist on the "Add item" page or login to view your saved item list. If you are testing, you can login with U: "testuser" PW: "testpass" 
                         when logging in the first time you might experince a slow login, as the backend is hosted with a free subscription. This allows the system to be available at all times. In a dream senario, the front end project will be published on a domain.
+                    </div>
                     </div>
                 )   
             }

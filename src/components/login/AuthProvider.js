@@ -17,7 +17,9 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         const storedUser = JSON.parse(localStorage.getItem("user"))
+        const storedAvatar = JSON.parse(localStorage.getItem("avatarData"))
         console.log("STORED USER", storedUser)
+        console.log("IMAGE", avatarImage)
     
 
         console.log("Initial token check:", token ? "Token exists" : "No token");
@@ -44,6 +46,7 @@ export const AuthProvider = ({ children }) => {
                     console.log("Setting logged in to TRUE");
                     setIsLoggedIn(true)
                     setUser(storedUser)
+                    setAvatarImage(storedAvatar)
                 } else{
                     console.log("Token expired, removing");
                     localStorage.removeItem('token')
@@ -62,6 +65,7 @@ export const AuthProvider = ({ children }) => {
     const login2 = (token, userData, avatarData) =>  {
         localStorage.setItem('token', token);
         localStorage.setItem('user',JSON.stringify(userData))
+        localStorage.setItem('avatarData', JSON.stringify(avatarData))
         setIsLoggedIn(true)
         setUser(userData)
         setAvatarImage(avatarData)

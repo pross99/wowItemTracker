@@ -35,23 +35,6 @@ const BATTLE_NET_TOKEN = process.env.REACT_APP_BATTLE_NET_TOKEN;
               });
 
 
-       /*        const battleNetTokenResponse = await axios.post('https://oauth.battle.net/token',
-                new URLSearchParams({
-                  'grant_type': 'client_credentials'
-                }),
-                {
-                  auth: {
-                    username: BATTLE_NET_CLIENT_ID,
-                    password:  BATTLE_NET_CLIENT_SECRET
-                  },
-                  headers: {
-                   'Content-Type': 'application/x-www-form-urlencoded',
-                   
-                  }
-                }
-              ); */
-  
-           //   console.log(battleNetTokenResponse)
   
                 const token = loginResponse.data.token;
                 const userData = {
@@ -59,25 +42,15 @@ const BATTLE_NET_TOKEN = process.env.REACT_APP_BATTLE_NET_TOKEN;
                   userId: loginResponse.data.userId,
                   charName: loginResponse.data.charName,
                   charServer: loginResponse.data.charServer,
-                 // battleNetAccessToken: battleNetTokenResponse.data.access_token // store access token from battlenet
+                
                 }
                 console.log("YOUR ACCESS TOKEN WOOPWOOP", userData.battleNetAccessToken);
-               // const wowGetAvatar = await axios.get(`https://eu.api.blizzard.com/profile/wow/character/${userData.charServer}/${userData.charName}/character-media`, {
                 const wowGetAvatar = await axios.get(`https://springtransmogapi5-714423430443.europe-west1.run.app/api/v1/battle-net/character-avatar?server=${userData.charServer}&characterName=${userData.charName}&accessToken=${BATTLE_NET_TOKEN}`, {
                   
                 })
                 console.log(wowGetAvatar.data)
                 const avatarData = wowGetAvatar.data
-                //const assets = wowGetAvatar.response.data.assets; // storing the assets array containing the needed image (main-raw)
-               // const mainRaw = assets.find(asset => asset.key == "main-raw");
-               /*  if(mainRaw) {
-                  const mainRawUrl=mainRaw.value;
-                } else {
-                  console.log("main-raw asset not found?")
-                }
-                const avatarData = {
-                  avatar: mainRaw
-                } */
+           
               
 
               const decoded = jwtDecode(token);

@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import './Register.css'
 import axiosInstance from "../../api/axiosConfig";
+import axios from "axios";
 import  {jwtDecode } from 'jwt-decode';
 import { useAuth } from "./AuthProvider";
 
@@ -9,9 +10,21 @@ import { useAuth } from "./AuthProvider";
 export default function Register(props) {
     const [username,setUsername] = useState('')
     const [password,setPassword] = useState('')
+    const [charServer, setCharServer] = useState('')
+    const [charName, setCharName] = useState('')
     const [error, setError] = useState(null); // FOR ERRORS
     const [isLoading, setIsLoading] = useState(false)
     const { login2 } = useAuth();
+
+    const BATTLE_NET_TOKEN = process.env.REACT_APP_BATTLE_NET_TOKEN;
+
+    const handleCharServerChange = (e) => {
+        setCharServer(e.target.value.toLowerCase())
+    }
+
+    const handleCharNameChange = (e) => {
+        setCharName(e.target.value.toLowerCase())
+    }
 
 
 
@@ -20,29 +33,31 @@ export default function Register(props) {
         setIsLoading(true)
         setError(null)
         try {
-            await axiosInstance.post(`api/v1/auth/register`, {
+            const registerResponse = await axiosInstance.post(`api/v1/auth/register`, {
                 username,
-                password
+                password,
+                charName,
+                charServer
             })
-            .then(response => {
-                const token = response.data.token;
+           
+                const token = registerResponse.data.token;
                 const userData = {
-                  username: response.data.username, // Username of the logged-in user
-                  userId: response.data.userId,
+                  username: registerResponse.data.username, // Username of the logged-in user
+                  userId: registerResponse.data.userId,
+                  charName: registerResponse.data.charName,
+                  charServer: registerResponse.data.charServer
                 }
-
+                const wowGetAvatar = await axios.get(`https://springtransmogapi5-714423430443.europe-west1.run.app/api/v1/battle-net/character-avatar?server=${userData.charServer}&characterName=${userData.charName}&accessToken=${BATTLE_NET_TOKEN}`, {
+                  
+                })
+                console.log(wowGetAvatar.data)
+                const avatarData = wowGetAvatar.data
                 const decoded = jwtDecode(token);
 
-                console.log("New token decoded:", decoded);
-                console.log("Token exp:", decoded.exp * 1000);
-                console.log("Current time:", Date.now());
-                console.log("Time until expiry (minutes):", 
-                    Math.round((decoded.exp * 1000 - Date.now()) / 1000 / 60));
 
-
-            login2(token,userData) // using the function from AuthProvider
+            login2(token,userData, avatarData) // using the function from AuthProvider
              props.toggle();
-            })
+            
 
         }catch(error) {
             setError("Something failed");
@@ -65,6 +80,17 @@ export default function Register(props) {
                     <label>
                         Password:
                         <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+                        required />
+                    </label>
+                    <h4>The server and name below will be used to fetch your char from Blizzard</h4>
+                    <label>
+                        Server - Only EU realms:
+                        <input type="text" value={charServer} onChange={handleCharServerChange} 
+                        required />
+                    </label>
+                    <label>
+                        Main Character Name:
+                        <input type="text" value={charName} onChange={handleCharNameChange}
                         required />
                     </label>
                     <button type="submit" disabled={isLoading}>
