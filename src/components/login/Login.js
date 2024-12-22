@@ -19,8 +19,7 @@ export default function Login(props) {
     const { setUser } = useContext(UserContext); //  Get the setUser finction form context - has been refactored, marked for deletion
     const { login } = useContext(UserContext)
     const { login2 } = useAuth();
-
-const BATTLE_NET_TOKEN = process.env.REACT_APP_BATTLE_NET_TOKEN;
+    const {bNetToken} = useAuth();
 
     const handleLogin = async (e) => {
      
@@ -45,7 +44,7 @@ const BATTLE_NET_TOKEN = process.env.REACT_APP_BATTLE_NET_TOKEN;
                 
                 }
                 console.log("YOUR ACCESS TOKEN WOOPWOOP", userData.battleNetAccessToken);
-                const wowGetAvatar = await axios.get(`https://springtransmogapi5-714423430443.europe-west1.run.app/api/v1/battle-net/character-avatar?server=${userData.charServer}&characterName=${userData.charName}&accessToken=${BATTLE_NET_TOKEN}`, {
+                const wowGetAvatar = await axios.get(`https://springtransmogapi5-714423430443.europe-west1.run.app/api/v1/battle-net/character-avatar?server=${userData.charServer}&characterName=${userData.charName}&accessToken=${bNetToken}`, {
                   
                 })
                 console.log(wowGetAvatar.data)
@@ -54,7 +53,7 @@ const BATTLE_NET_TOKEN = process.env.REACT_APP_BATTLE_NET_TOKEN;
               
 
               const decoded = jwtDecode(token);
-                login2(token,userData, avatarData) // using the function from AuthProvider
+                login2(token,userData, avatarData, bNetToken) // using the function from AuthProvider
                 props.toggle();
            
               
@@ -83,7 +82,7 @@ const BATTLE_NET_TOKEN = process.env.REACT_APP_BATTLE_NET_TOKEN;
                             Password:
                             <input type="password" value={password} onChange={e => setPassword(e.target.value)}
                             required />
-                            <p> HI {BATTLE_NET_TOKEN}</p>
+                            <p> HI {bNetToken}</p>
                         </label>
                         <button type="submit" disabled={isLoading}>
                         {isLoading ? 'Logging in...' : 'Login'}

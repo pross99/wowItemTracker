@@ -8,6 +8,7 @@ import Header from "./components/header/Header"
 import Layout from './components/Layout'
 import AddItem from "./components/item/addItem/AddItem"
 import { useAuth } from './components/login/AuthProvider';
+import CORSTest from './components/item/addItem/testC';
 
 function App() {
 // added []
@@ -15,6 +16,7 @@ function App() {
  // const {userId} = useContext(UserContext);
  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { user, isLoggedIn,setIsLoggedIn } = useAuth();
+  const {token} = useAuth();
 
   const handleDeleteComplete = async (deletedItem) => {
     await getItems();
@@ -71,6 +73,7 @@ useEffect(() => {
     <Route path="/" element={<Layout/>}>
       <Route path="/" element={<Home items={items} onDelete={handleDeleteComplete} onEdit={handleEditComplete} />} ></Route>
         <Route path="/Add" element={<AddItem onItemAdded={getItems}/>} ></Route>  
+        <Route path="/ct" element={<CORSTest/>} ></Route>  
     </Route>
    </Routes>
     </div> 
