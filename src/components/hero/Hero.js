@@ -10,6 +10,7 @@ import axiosInstance from '../../api/axiosConfig';
 import UserContext from '../UserContext'
 import { useAuth } from '../login/AuthProvider'
 import EditItem from '../item/editItem/EditItem';
+import CompleteItem from '../item/editItem/CompletedItem';
 import DeleteItem from '../item/deleteItem/DeleteItem';
 import SpinnerLoader from '../SpinnerLoader/SpinnerLoader'
 // const url = 'https://f30b-87-63-77-53.ngrok-free.app//api/v1/items/${wowheaditemId}'
@@ -23,8 +24,8 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
     const { user, isLoggedIn } = useAuth();
     const {avatarImage} = useAuth();
     const [itemToDelete, setItemToDelete] = useState(null);
-    const [showComplete, setShowComplete] = useState(false);
     const [itemToEdit, setItemToEdit] = useState(null); // the specific item that needs editing
+    const [itemToMarkCompletion, setItemToMarkCompletion] = useState(null); // the specific item that needs editing
 
 
 
@@ -49,6 +50,29 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
     };
 
 
+    //MARKING ITEM TO GO TO COMPLETION LIST
+    const handleMarkCompletion = (item) => {
+        setItemToMarkCompletion(item);
+    };
+
+    const handleMarkCompletionComplete = async (updatedItem) => {
+        setItemToEdit(null);
+        // Update the local items list
+        setLocalItems(prevItems => 
+            prevItems.map(item => 
+                item.wowheadId === updatedItem.wowheadId ? updatedItem : item
+            )
+        );
+        // If parent provided onEdit callback, call it
+        if (onEdit) {
+            onEdit(updatedItem);
+        }
+    };
+
+
+
+
+
     const handleDeleteItem = (item) => {
         setItemToDelete(item);
     };
@@ -70,11 +94,17 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
         setTimeout(() => {
         setItemToEdit(null);
         setItemToDelete(null);
+        setItemToMarkCompletion(null);
 
 
         },800)
         
     };
+
+
+    const completeItem = () => {
+        
+    }
 
     useEffect(() => {
     
@@ -118,8 +148,11 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
         <div className='item-carousel-container'>
 
             <Carousel>
-            {items && items.length > 0 ? (
-                    items.map((item) => {
+            {items && items.length > 0 && items.filter(item => !item.completed).length > 0
+            ? (
+                items
+                .filter(item => !item.completed)
+                .map((item) => {       
                         return (
                         <Paper key={item.wowheadId}> {/* Use unique wowheahId */}
                             <div className='item-card-container' >
@@ -177,6 +210,7 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
                                                 <div className= "complete-button-icon-container">
                                                     <FontAwesomeIcon className= "complete-button-icon"
                                                     icon ={faCheck}
+                                                    onClick={() => handleMarkCompletion(item)}
                                                     />
                                                 </div>
                                                 
@@ -213,7 +247,13 @@ const Hero = ({ items, onDelete, onEdit, onComplete}) => {
             onDelete={handleDeleteComplete}
             toggle={handleCloseEdit}    
             />
-            } 
+            }
+            {itemToMarkCompletion && <CompleteItem
+            item={itemToMarkCompletion}
+            onEdit={handleMarkCompletionComplete}
+            toggle={handleCloseEdit}
+                />
+        } 
         </div>
          </div>
     )

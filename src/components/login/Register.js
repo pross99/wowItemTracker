@@ -15,8 +15,7 @@ export default function Register(props) {
     const [error, setError] = useState(null); // FOR ERRORS
     const [isLoading, setIsLoading] = useState(false)
     const { login2 } = useAuth();
-
-    const BATTLE_NET_TOKEN = process.env.REACT_APP_BATTLE_NET_TOKEN;
+    const {bNetToken} = useAuth();
 
     const handleCharServerChange = (e) => {
         setCharServer(e.target.value.toLowerCase())
@@ -47,7 +46,7 @@ export default function Register(props) {
                   charName: registerResponse.data.charName,
                   charServer: registerResponse.data.charServer
                 }
-                const wowGetAvatar = await axios.get(`https://springtransmogapi5-714423430443.europe-west1.run.app/api/v1/battle-net/character-avatar?server=${userData.charServer}&characterName=${userData.charName}&accessToken=${BATTLE_NET_TOKEN}`, {
+                const wowGetAvatar = await axios.get(`https://springtransmogapi5-714423430443.europe-west1.run.app/api/v1/battle-net/character-avatar?server=${userData.charServer}&characterName=${userData.charName}&accessToken=${bNetToken}`, {
                   
                 })
                 console.log(wowGetAvatar.data)
@@ -55,7 +54,7 @@ export default function Register(props) {
                 const decoded = jwtDecode(token);
 
 
-            login2(token,userData, avatarData) // using the function from AuthProvider
+            login2(token,userData, avatarData, bNetToken) // using the function from AuthProvider
              props.toggle();
             
 
@@ -82,7 +81,7 @@ export default function Register(props) {
                         <input type="password" value={password} onChange={e => setPassword(e.target.value)}
                         required />
                     </label>
-                    <h4>The server and name below will be used to fetch your char from Blizzard</h4>
+                    <h4>The server and name below will be used to fetch your char from Blizzard's API</h4>
                     <label>
                         Server - Only EU realms:
                         <input type="text" value={charServer} onChange={handleCharServerChange} 

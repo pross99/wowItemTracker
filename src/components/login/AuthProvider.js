@@ -38,7 +38,7 @@ console.log('GET BNET TOKEN:',sub)
         const token = localStorage.getItem('token');
         const storedUser = JSON.parse(localStorage.getItem("user"))
         const storedAvatar = JSON.parse(localStorage.getItem("avatarData"))
-        const storedBNetToken = JSON.parse(localStorage.getItem("bNetToken"))
+        const storedBNetToken = localStorage.getItem("bNetToken")
         console.log("STORED BNET TOKEN", storedBNetToken)
         getAuthToken();
         

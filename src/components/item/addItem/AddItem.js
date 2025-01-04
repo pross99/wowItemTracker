@@ -5,6 +5,7 @@ import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axiosInstance from '../../../api/axiosConfig';
+import { useAuth } from '../../login/AuthProvider';
 
 function AddItem({onItemAdded}) {
   const [itemName, setItemName] = useState('Corrupted Ashbringer');
@@ -14,7 +15,8 @@ function AddItem({onItemAdded}) {
   const [expansion, setExpansion] = useState('Classic');
   const [location, setLocation] = useState('Naxxramas');
   const [backdrops, setBackdrops] = useState('https://wow.zamimg.com/uploads/screenshots/normal/1078514-corrupted-ashbringer.jpg');
-  const {user} = useContext(UserContext); // Get current user
+  const {user} = useAuth(); // Get current user
+  
 
  const notify = () =>  toast.success('Item added', {
     position: "bottom-center",
@@ -41,7 +43,8 @@ function AddItem({onItemAdded}) {
           expansion: expansion,
           location: location,
           backdrops: backdrops,
-          userId: user.userId
+          userId: user.userId,
+          completed: false
         });
 
         console.log(response.data)
